@@ -30,4 +30,5 @@ class DataSource {
         ),//248
         Triple(5, "Сколько спутников у Юпитера?", listOf("5", "10", "79", "0", "4"))//79
     )
+    val trueAnswerList = listOf(3, 2, 1, 5, 3)
 }

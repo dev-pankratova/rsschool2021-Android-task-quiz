@@ -9,7 +9,7 @@ class MainActivity : AppCompatActivity() {
     private var _fragment: FragmentQuiz? = null
     private val fragment get() = _fragment
 
-    private var _sharefragment: FragmentQuiz? = null
+    private var _sharefragment: FragmentShare? = null
     private val sharefragment get() = _sharefragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,18 +21,17 @@ class MainActivity : AppCompatActivity() {
     private fun openFragment(pageNumber: Int) {
         _fragment = FragmentQuiz.newInstance(pageNumber)
 
-        if (_fragment != null) attachFragment(_fragment!!)
+        if (fragment != null) attachFragment(fragment!!)
 
         fragment?.setInterface(object : NavigationInterface {
             override fun setPageNumber(page: Int) {
-                if (page != 6) openFragment(page)
-                else openShareFragment()
+                if (page in 1..5) openFragment(page)
+                else if (page == 6) openShareFragment()
             }
         })
     }
 
     private fun attachFragment(fragment: Fragment) {
-
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.container, fragment)
             commit()
@@ -41,6 +40,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun openShareFragment() {
         _sharefragment = FragmentShare.newInstance()
-        if (_sharefragment != null) attachFragment(_sharefragment!!)
+        if (sharefragment != null) attachFragment(sharefragment!!)
+
+        sharefragment?.setShareInterface(object : RestoreInterface {
+            override fun goToFirstPage() {
+                openFragment(1)
+            }
+        })
+    }
+
+    companion object {
+        var userAnswerList = MutableList(5) { 0 }
     }
 }
